@@ -15,5 +15,12 @@ app.use(bodyParser.json())
 
 
 //routes
+const courseRouter=require('/routes/courseRouter')
+app.use('/api/courses',courseRouter)
+const studentrouter= require('./routes/studentRouter')
+app.use('/api/students',studentrouter)
+const classrouter=require('./routes/classRouter')
+app.use('/api/class',classrouter)
+
 
 app.listen(4000,()=>console.log('Listening on port 4000'));

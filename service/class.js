@@ -35,7 +35,7 @@ const StudentCourses=require ('../models/StudentCourses')
 //};
 //console.log(result)
 //const result = await Student.findAll({
-    include:[Course]
+   // include:[Course]
 //})
 
 //}
@@ -51,4 +51,26 @@ const StudentCourses=require ('../models/StudentCourses')
 //console.log((await Student.findOne().ClassId));
 
 //creation();
+
+async function test(req,res){
+    let classes=Class.create({Classname:'2',Classdescription:'hard'}).then((Class)=>
+    Class.createStudent({Studentname:'hamz'}))
+}
+
+async function test1(req,res){
+    let classes=Course.create({Coursename:'math',Coursedescription:'difficile'}).then((Course)=>
+    Course.createStudent({Studentname:'ham'}))
+}
+
+async function test2(req,res){
+    const crs = await Course.findOne({where:{id:1}});
+    const std=await Student.findOne({where:{id:2}});
+    await std.addCourse(crs)
+}
+
+//async function count(req,res){
+  //  Std=Class.findOne({where:{Classname:'2a'}})
+    //await Class.countStudent()
+//}
+
 
