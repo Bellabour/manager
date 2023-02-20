@@ -8,9 +8,9 @@ const Class = db.Classes;
 const Course = db.Courses;
 
 //create course
-const addCOurse = async (req, res) => {
+const addCourse = async (req, res) => {
   let info = {
-    COursename: req.body.Coursename,
+    Coursename: req.body.Coursename,
     Coursedescription: req.body.Coursedescription,
   };
   const course = await Course.create(info);
@@ -56,7 +56,7 @@ const deleteCourse = async (req, res) => {
 
 
   module.exports={
-    addCOurse,
+    addCourse,
     getAllCourses,
     updateCourse,
     deleteCourse,

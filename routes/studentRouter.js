@@ -9,8 +9,6 @@ router.get('/allStudents',studentController.getAllStudents)
 router.get('/detail/:id',studentController.getDetailedStudents)
 
 
-router.get('/:id',studentController.getOneStudent)
-
 router.get('/countcourses/:id',studentController.Countcourses)
 
 router.put('/:id',studentController.updateStudent)
