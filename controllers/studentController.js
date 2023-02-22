@@ -12,14 +12,13 @@ const Course = db.Courses;
 //create Student
 const addStudent = async (req, res) => {
   if (req.body.Studentname == "") {
+    return res.status(422).json({ message: "Studentname cannot be empty" });
+  } else if (!req.body.Studentname) {
     return res
-      .status(422)
-      .json({ message: 'Studentname cannot be empty' });
+      .status(412)
+      .json({ message: "Studentname should be spelt correctly" });
   }
-  else if(!req.body.Studentname){
-    return res.status(412).json({message:'Studentname should be spelt correctly'})
-  }
-  let info = await {
+  let info = {
     Studentname: req.body.Studentname,
     age: req.body.age,
   };
@@ -39,14 +38,16 @@ const getAllStudents = async (req, res) => {
   let students = await Student.findAll({
     attributes: ["id", "Studentname", "age"],
   });
-  if(!students){return ({message:'no students found'})}
+  if (!students) {
+    return { message: "no students found" };
+  }
   res.status(200).send(students);
 };
 //update one student
 const updateStudent = async (req, res) => {
   let id = req.params.id;
   const student = await Student.update(req.body, { where: { id: id } });
-  res.status(200).send(student)|| "we just got an error";
+  res.status(200).send(student) || "we just got an error";
 };
 //delete student by id
 const deleteStudent = async (req, res) => {
@@ -62,29 +63,40 @@ const getDetailedStudents = async (req, res) => {
     where: { id: id },
     include: [{ model: Course, attributes: ["Coursename"] }, Class],
   });
-  if(student){return res.status(200).send(student)}
-  else(res.status(400).send({message:'student with that id does not exist'}|| "we just got an error"))
+  if (student) {
+    return res.status(200).send(student);
+  } else
+    res
+      .status(400)
+      .send(
+        { message: "student with that id does not exist" } ||
+          "we just got an error"
+      );
 };
 //add course by student id
 const Addcourse = async (req, res) => {
   if (req.body.Coursename == "") {
+    return res.status(422).json({ message: "Coursename cannot be empty" });
+  } else if (!req.body.Coursename) {
     return res
-      .status(422)
-      .json({ message: 'Coursename cannot be empty' });
+      .status(412)
+      .json({ message: "Coursename should be spelt correctly" });
   }
-  else if(!req.body.Coursename){
-    return res.status(412).json({message:'Coursename should be spelt correctly'})
+  try {
+    let std = await Student.findByPk(req.params.id, {});
+    let info = {
+      Coursename: req.body.Coursename,
+    };
+    let crs = await Course.findOne({ where: info });
+    if (crs) {
+    } else
+      return res.status(400).send({ message: "course could not be found" });
+    await std.addCourse(crs);
+    return res.status(200).send("Course added succesfully");
+  } catch (error) {
+    return res.status(400).json({ message: error.message });
   }
-  try{
-  let std = await Student.findByPk(req.params.id, {});
-  let info = {
-    Coursename: req.body.Coursename,
-  };
-  let crs = await Course.findOne({ where: info });
-  if(crs){}else return(res.status(400).send({message:'course could not be found'}))
-  await std.addCourse(crs);
-  return res.status(200).send("Course added succesfully");
-}catch(error){return res.status(400).json({message:error.message})}};
+};
 
 //add and update student class by class id
 const AddClass = async (req, res) => {

@@ -54,15 +54,9 @@ const getOneClass = async (req, res) => {
   };
   //update one class
 const updateClass = async (req, res) => {
-    let id = await Class.findByPk(req.params.id)
-    if(id){
-      const cls = await Class.update(req.body, { where: { id: id } });
-      res.status(200).send(cls);
-    } else{
-      res.status(400).json({
-        message: "wrong id"
-      })
-    }
+    let id = req.params.id;
+    const cls = await Class.update(req.body, { where: { id: id } });
+    res.status(200).send(cls);
   };
 
 
